@@ -1,0 +1,15 @@
+org_name: nullstone
+name: gcp-cloudrun-pubsub-trigger
+friendly_name: Pub/Sub Trigger for Cloud Run
+description: Triggers a Cloud Run Job for each message in a Pub/Sub Topic
+category: capability
+subcategory: datastores
+provider_types:
+    - gcp
+platform: pubsub
+subplatform: cloudrun
+type: ""
+appCategories:
+    - container
+is_public: true
+tool_name: terraform
