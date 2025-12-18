@@ -18,6 +18,8 @@ resource "google_eventarc_trigger" "this" {
   destination {
     workflow = google_workflows_workflow.this.id
   }
+
+  depends_on = [google_project_service.eventarc]
 }
 
 resource "google_workflows_workflow" "this" {
@@ -38,14 +40,10 @@ main:
           # Pub/Sub event payload (CloudEvent style):
           # event.data.message.data = base64-encoded string
           # event.data.message.attributes = map of attributes
-          - base64_data: $${event.data.message.data}
+          - msg: $${event.data.message}
+          - base64_data: $${msg.data}
           - message_text: $${text.decode(base64.decode(base64_data))}
-          - attributes_json: $${json.encode(event.data.message.attributes)}
-    - log_message:
-        call: sys.log
-        args:
-          data: $${"Received Pub/Sub message: " + message_text}
-          severity: "INFO"
+          - attributes_json: $${if("attributes" in msg, json.encode(map.get(msg, "attributes")), "{}")}
     - run_job:
         # Use Cloud Run Jobs API via Workflows connector
         call: googleapis.run.v2.projects.locations.jobs.run
@@ -64,4 +62,6 @@ main:
     - done:
         return: $${job_execution}
 EOF
+
+  depends_on = [google_project_service.workflows]
 }

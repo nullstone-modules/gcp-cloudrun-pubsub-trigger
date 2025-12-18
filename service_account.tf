@@ -9,8 +9,26 @@ resource "google_project_iam_member" "eventarc_invoker" {
   member  = "serviceAccount:${google_service_account.trigger.email}"
 }
 
-resource "google_project_iam_member" "workflows_job_runner" {
+resource "google_project_iam_member" "workflows_job_exec" {
   project = local.project_id
-  role    = "roles/run.jobRunner"
+  role    = "roles/run.jobsExecutor"
+  member  = "serviceAccount:${google_service_account.trigger.email}"
+}
+
+resource "google_project_iam_member" "workflows_job_exec_overrides" {
+  project = local.project_id
+  role    = "roles/run.jobsExecutorWithOverrides"
+  member  = "serviceAccount:${google_service_account.trigger.email}"
+}
+
+resource "google_project_iam_member" "workflows_run_viewer" {
+  project = local.project_id
+  role    = "roles/run.viewer"
+  member  = "serviceAccount:${google_service_account.trigger.email}"
+}
+
+resource "google_project_iam_member" "workflows_run_invoker" {
+  project = local.project_id
+  role    = "roles/run.invoker"
   member  = "serviceAccount:${google_service_account.trigger.email}"
 }
