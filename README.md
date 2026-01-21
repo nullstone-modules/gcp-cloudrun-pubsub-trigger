@@ -4,7 +4,7 @@ Nullstone capability to trigger a Cloud Run Job from a Pub/Sub Topic
 ## How to use
 
 After adding this capability, update your code to use `PUBSUB_MESSAGE` and `PUBSUB_ATTRIBUTES` environment variables.
-- `PUBSUB_MESSAGE` contains the raw message payload.
+- `PUBSUB_MESSAGE` contains the message payload that is Base64-encoded.
 - `PUBSUB_ATTRIBUTES` contains the message attributes.
 
 ## How it works

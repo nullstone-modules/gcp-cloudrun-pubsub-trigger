@@ -41,8 +41,6 @@ main:
           # event.data.message.data = base64-encoded string
           # event.data.message.attributes = map of attributes
           - msg: $${event.data.message}
-          - base64_data: $${msg.data}
-          - message_text: $${text.decode(base64.decode(base64_data))}
           - attributes_json: $${if("attributes" in msg, json.encode(map.get(msg, "attributes")), "{}")}
     - run_job:
         # Use Cloud Run Jobs API via Workflows connector
@@ -55,7 +53,7 @@ main:
               containerOverrides:
                 env:
                   - name: PUBSUB_MESSAGE
-                    value: $${message_text}
+                    value: $${msg.data}
                   - name: PUBSUB_ATTRIBUTES
                     value: $${attributes_json}
         result: job_execution
